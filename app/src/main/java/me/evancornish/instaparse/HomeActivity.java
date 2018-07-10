@@ -26,7 +26,6 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<Post> posts;
     RecyclerView rvTimeline;
     PostAdapter adapter;
-    final static int REQUEST_CODE = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.miAdd:
                 Intent intent = new Intent(this, Create.class);
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivity(intent);
                 break;
         }
         return true;
@@ -88,10 +87,5 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         rvTimeline.scrollToPosition(0);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //code for after pic posted
     }
 }
