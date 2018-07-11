@@ -1,6 +1,7 @@
 package me.evancornish.instaparse;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -17,6 +19,10 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +71,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e == null) {
                             Intent intentOut = new Intent(HomeActivity.this, MainActivity.class);
+                            intentOut.putExtra("Forget",true);
                             startActivity(intentOut);
                             finish();
                         }

@@ -1,16 +1,28 @@
 package me.evancornish.instaparse;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button bLogin;
     private Button bSignUp;
+
+    ArrayList<String> info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +43,26 @@ public class MainActivity extends AppCompatActivity {
         bLogin = findViewById(R.id.bLogin);
         bSignUp = findViewById(R.id.bSignUp);
 
+        if (getIntent().getBooleanExtra("Forget", false)) {
+            info = null;
+            writeInfo();
+        }
+
+        readInfo();
+        if (info != null && info.size() > 0) {
+            etUsername.setText(info.get(0));
+            etPassword.setText(info.get(1));
+
+            login(info.get(0), info.get(1), true);
+        }
+
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
 
-                login(username, password);
+                login(username, password, false);
             }
         });
 
@@ -47,12 +74,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void login(String username, String password) {
+    private void login(String username, final String password, boolean saved) {
+        final boolean saveMe = !saved;
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity", "Login successful");
+                    if(saveMe) {
+                        info = new ArrayList<>();
+                        info.add(user.getUsername());
+                        info.add(password);
+                        writeInfo();
+                    }
                     final Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
@@ -62,5 +96,36 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @NonNull
+    private File getDataFile()
+    {
+        return new File(getFilesDir(),"user.txt");
+    }
+
+    private void readInfo()
+    {
+        try
+        {
+            info=new ArrayList<String>(FileUtils.readLines(getDataFile(), Charset.defaultCharset()));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            info=null;
+        }
+    }
+
+    private void writeInfo()
+    {
+        try
+        {
+            FileUtils.writeLines(getDataFile(),info);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
