@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".Create"></activity>
+        <activity android:name=".Create" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.codepath.fileprovider"
@@ -33,6 +34,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
+        <activity android:name=".DetailedPostActivity"></activity>
     </application>
 
 </manifest>

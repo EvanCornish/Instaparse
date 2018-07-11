@@ -1,6 +1,7 @@
 package me.evancornish.instaparse;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return posts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView ivPic;
         TextView tvName;
         TextView tvUsername;
@@ -59,9 +60,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             super(itemView);
 
             ivPic = itemView.findViewById(R.id.ivPic);
-            tvName = itemView.findViewById(R.id.tvName);
+            tvName = itemView.findViewById(R.id.tvDName);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                Post post = posts.get(getAdapterPosition());
+                Intent intent = new Intent(context, DetailedPostActivity.class);
+                intent.putExtra("Post",post.getObjectId());
+                context.startActivity(intent);
+            }
         }
     }
 }
