@@ -101,10 +101,17 @@ public class Create extends AppCompatActivity implements Pics.PicMethodSelector 
             case R.id.miBack:
                 break;
             case R.id.miPost:
-                EditText description = findViewById(R.id.etNewDescription);
-                ParseUser user = ParseUser.getCurrentUser();
-                ParseFile imageFile = new ParseFile(photoFile);
-                createPost(description.getText().toString(), imageFile, user);
+                final EditText description = findViewById(R.id.etNewDescription);
+                final ParseUser user = ParseUser.getCurrentUser();
+                final ParseFile imageFile = new ParseFile(photoFile);
+
+                imageFile.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e==null)
+                            createPost(description.getText().toString(), imageFile, user);
+                    }
+                });
                 break;
         }
 
@@ -156,6 +163,14 @@ public class Create extends AppCompatActivity implements Pics.PicMethodSelector 
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
+        photoFile = getPhotoFileUri(photoFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(this, "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -166,30 +181,17 @@ public class Create extends AppCompatActivity implements Pics.PicMethodSelector 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+        BitmapScaler scaler = new BitmapScaler();
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_PHOTO_CODE) {
             if (resultCode == RESULT_OK) {
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
-                BitmapScaler scaler = new BitmapScaler();
                 Bitmap resizedBitmap = scaler.scaleToFitWidth(takenImage, ivNewPic.getWidth());
                 // Load the taken image into a preview
                 ivNewPic.setImageBitmap(resizedBitmap);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == PICK_PHOTO_CODE) {
-            if (data != null) {
-                Uri photoUri = data.getData();
-                // Do something with the photo based on Uri
-                try {
-                    photoFile = new File(photoUri.getPath());
-                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-                    // Load the selected image into a preview
-                    ivNewPic.setImageBitmap(selectedImage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -206,6 +208,7 @@ public class Create extends AppCompatActivity implements Pics.PicMethodSelector 
                 if (e == null) {
                     Log.d("Create", "Create post success!");
                 } else {
+                    Log.e("Create", "Failure");
                     e.printStackTrace();
                 }
             }
