@@ -4,11 +4,16 @@
     <item
         android:id="@+id/miAdd"
         android:icon="@android:drawable/ic_input_add"
-        android:title="Add"
-        app:showAsAction="ifRoom"></item>
+        android:title="Add a Post"
+        app:showAsAction="collapseActionView"></item>
     <item
         android:id="@+id/miRefresh"
         android:icon="@android:drawable/stat_notify_sync"
-        android:title="Refresh"
-        app:showAsAction="ifRoom"></item>
+        android:title="Refresh Feed"
+        app:showAsAction="collapseActionView"></item>
+    <item
+        android:id="@+id/miLogOut"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:title="Log Out"
+        app:showAsAction="collapseActionView"></item>
 </menu>

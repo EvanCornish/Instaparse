@@ -13,7 +13,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:background="@android:color/holo_purple"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <EditText

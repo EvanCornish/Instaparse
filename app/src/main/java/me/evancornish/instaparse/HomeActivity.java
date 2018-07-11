@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.FindCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -55,8 +56,20 @@ public class HomeActivity extends AppCompatActivity {
                 loadTopPosts();
                 break;
             case R.id.miAdd:
-                Intent intent = new Intent(this, Create.class);
-                startActivity(intent);
+                Intent intentAdd = new Intent(this, Create.class);
+                startActivity(intentAdd);
+                break;
+            case R.id.miLogOut:
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Intent intentOut = new Intent(HomeActivity.this, MainActivity.class);
+                            startActivity(intentOut);
+                            finish();
+                        }
+                    }
+                });
                 break;
         }
         return true;
