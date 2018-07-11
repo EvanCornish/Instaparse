@@ -27,18 +27,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
 import me.evancornish.instaparse.model.Post;
 
-public class Create extends AppCompatActivity {
+public class Create extends AppCompatActivity implements Pics.PicMethodSelector {
 
     //assign path for image in String imagePath
     ImageView ivNewPic;
-    Bitmap resizedBitmap;
     boolean showing;
     Pics pics;
     BlankFragment blank;
     FragmentTransaction ft;
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public String photoFileName = "photo.jpg";
+    File photoFile;
+    public final static int PICK_PHOTO_CODE = 1046;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,24 +55,41 @@ public class Create extends AppCompatActivity {
         ivNewPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (showing) {
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.flHolder, blank);
-                    ft.commit();
-                } else {
-                    ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.flHolder, pics);
-                    ft.commit();
-                }
-                showing = !showing;
+                flip();
             }
         });
+    }
+
+    public void flip() {
+        if (showing) {
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flHolder, blank);
+            ft.commit();
+        } else {
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flHolder, pics);
+            ft.commit();
+        }
+        showing = !showing;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_post, menu);
         return true;
+    }
+
+    @Override
+    public void picMethodSelected(String method) {
+        switch (method) {
+            case "new":
+                onLaunchCamera();
+                break;
+            case "old":
+                onPickPhoto();
+                break;
+        }
+        flip();
     }
 
     @Override
@@ -83,7 +104,6 @@ public class Create extends AppCompatActivity {
                 EditText description = findViewById(R.id.etNewDescription);
                 ParseUser user = ParseUser.getCurrentUser();
                 ParseFile imageFile = new ParseFile(photoFile);
-
                 createPost(description.getText().toString(), imageFile, user);
                 break;
         }
@@ -92,11 +112,7 @@ public class Create extends AppCompatActivity {
         return true;
     }
 
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public String photoFileName = "photo.jpg";
-    File photoFile;
-
-    public void onLaunchCamera(View view) {
+    public void onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference to access to future access
@@ -134,10 +150,8 @@ public class Create extends AppCompatActivity {
         return file;
     }
 
-    public final static int PICK_PHOTO_CODE = 1046;
-
     // Trigger gallery selection for a photo
-    public void onPickPhoto(View view) {
+    public void onPickPhoto() {
         // Create intent for picking a photo from the gallery
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -158,7 +172,7 @@ public class Create extends AppCompatActivity {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 BitmapScaler scaler = new BitmapScaler();
-                resizedBitmap = scaler.scaleToFitWidth(takenImage, ivNewPic.getWidth());
+                Bitmap resizedBitmap = scaler.scaleToFitWidth(takenImage, ivNewPic.getWidth());
                 // Load the taken image into a preview
                 ivNewPic.setImageBitmap(resizedBitmap);
             } else { // Result was a failure
@@ -169,10 +183,11 @@ public class Create extends AppCompatActivity {
                 Uri photoUri = data.getData();
                 // Do something with the photo based on Uri
                 try {
+                    photoFile = new File(photoUri.getPath());
                     Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                     // Load the selected image into a preview
                     ivNewPic.setImageBitmap(selectedImage);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -195,7 +210,6 @@ public class Create extends AppCompatActivity {
                 }
             }
         });
-
         return newPost;
     }
 
