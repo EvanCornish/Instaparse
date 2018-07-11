@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button bLogin;
-    private Button bSignUp;
+    private Button bToSignUp;
 
     ArrayList<String> info;
 
@@ -41,10 +41,15 @@ public class MainActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         bLogin = findViewById(R.id.bLogin);
-        bSignUp = findViewById(R.id.bSignUp);
+        bToSignUp = findViewById(R.id.bToSignUp);
 
         if (getIntent().getBooleanExtra("Forget", false)) {
             info = null;
+            writeInfo();
+        }
+
+        if (getIntent().getBooleanExtra("New User", false)) {
+            info = getIntent().getStringArrayListExtra("Info");
             writeInfo();
         }
 
@@ -66,10 +71,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bSignUp.setOnClickListener(new View.OnClickListener() {
+        bToSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, SignUp.class);
+                startActivity(intent);
             }
         });
     }

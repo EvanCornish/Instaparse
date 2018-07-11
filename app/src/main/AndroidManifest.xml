@@ -34,7 +34,8 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".DetailedPostActivity"></activity>
+        <activity android:name=".DetailedPostActivity" />
+        <activity android:name=".SignUp"></activity>
     </application>
 
 </manifest>
