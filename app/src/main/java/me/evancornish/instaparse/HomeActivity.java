@@ -3,6 +3,7 @@ package me.evancornish.instaparse;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<Post> posts;
     RecyclerView rvTimeline;
     PostAdapter adapter;
+    SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,13 @@ public class HomeActivity extends AppCompatActivity {
         rvTimeline = findViewById(R.id.rvTimeline);
         rvTimeline.setLayoutManager(new LinearLayoutManager(this));
         rvTimeline.setAdapter(adapter);
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadTopPosts();
+            }
+        });
 
         loadTopPosts();
     }
@@ -58,9 +67,6 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.miRefresh:
-                loadTopPosts();
-                break;
             case R.id.miAdd:
                 Intent intentAdd = new Intent(this, Create.class);
                 startActivity(intentAdd);
@@ -94,6 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                     if (posts.size() != 0) {
                         posts.clear();
                         adapter.notifyDataSetChanged();
+                        swipeContainer.setRefreshing(false);
                     }
                     for (int i = 0; i < objects.size(); ++i) {
                         // Log.d("HomeActivity","Post[" + i + "] = " + objects.get(i).getDescription() + "\nusername = " + objects.get(i).getUser().getUsername());

@@ -5,15 +5,10 @@
         android:id="@+id/miAdd"
         android:icon="@android:drawable/ic_input_add"
         android:title="Add a Post"
-        app:showAsAction="collapseActionView"></item>
-    <item
-        android:id="@+id/miRefresh"
-        android:icon="@android:drawable/stat_notify_sync"
-        android:title="Refresh Feed"
-        app:showAsAction="collapseActionView"></item>
+        app:showAsAction="ifRoom"></item>
     <item
         android:id="@+id/miLogOut"
-        android:icon="@android:drawable/stat_notify_sync"
+        android:icon="@android:drawable/ic_menu_directions"
         android:title="Log Out"
-        app:showAsAction="collapseActionView"></item>
+        app:showAsAction="ifRoom"></item>
 </menu>
