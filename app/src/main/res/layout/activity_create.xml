@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:srcCompat="@drawable/camera_shadow_fill" />
 
     <EditText
         android:id="@+id/etNewDescription"

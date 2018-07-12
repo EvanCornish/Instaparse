@@ -60,6 +60,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         return true;
     }
 

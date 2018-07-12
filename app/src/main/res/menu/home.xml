@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/miAdd"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/instagram_new_post_filled_24"
         android:title="Add a Post"
         app:showAsAction="ifRoom"></item>
     <item

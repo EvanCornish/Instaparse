@@ -33,7 +33,7 @@
         android:layout_below="@+id/tvDName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:src="@android:color/holo_purple" />
+        android:src="@drawable/camera_shadow_fill" />
 
     <TextView
         android:id="@+id/tvDDescription"

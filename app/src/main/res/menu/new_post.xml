@@ -8,7 +8,7 @@
         app:showAsAction="ifRoom"></item>
     <item
         android:id="@+id/miPost"
-        android:icon="@android:drawable/ic_menu_send"
+        android:icon="@drawable/ufi_save_active"
         android:title="Post"
         app:showAsAction="ifRoom"></item>
 </menu>

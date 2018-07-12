@@ -38,13 +38,13 @@ public class SignUp extends AppCompatActivity {
                 ParseUser user = new ParseUser();
                 user.setUsername(etNewUsername.getText().toString());
                 user.setPassword(etNewPassword.getText().toString());
-                user.put("name",etName.getText().toString());
+                user.put("name", etName.getText().toString());
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
                             Intent intent = new Intent(SignUp.this, MainActivity.class);
-                            intent.putExtra("New User",true);
+                            intent.putExtra("New User", true);
                             ArrayList<String> info = new ArrayList<>();
                             info.add(etNewUsername.getText().toString());
                             info.add(etNewPassword.getText().toString());
@@ -60,6 +60,10 @@ public class SignUp extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         return true;
     }
 

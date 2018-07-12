@@ -76,6 +76,10 @@ public class Create extends AppCompatActivity implements Pics.PicMethodSelector 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_post, menu);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         return true;
     }
 
