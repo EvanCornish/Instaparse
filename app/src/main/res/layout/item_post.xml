@@ -46,4 +46,12 @@
         android:text="Description"
         tools:layout_editor_absoluteX="42dp"
         tools:layout_editor_absoluteY="335dp" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ivPic"
+        android:layout_below="@+id/tvDescription"
+        android:text="Time" />
 </RelativeLayout>
