@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Profile">
+
+    <TextView
+        android:id="@+id/tvNPosts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="21dp"
+        android:text="# of Posts" />
+
+    <TextView
+        android:id="@+id/tvNFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvNPosts"
+        android:layout_centerHorizontal="true"
+        android:text="# of Followers" />
+
+    <TextView
+        android:id="@+id/tvNFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvNPosts"
+        android:layout_marginEnd="46dp"
+        android:text="# Following" />
+
+    <TextView
+        android:id="@+id/tvTPosts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNPosts"
+        android:layout_below="@+id/tvNPosts"
+        android:text="Posts" />
+
+    <TextView
+        android:id="@+id/tvTFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNPosts"
+        android:layout_centerHorizontal="true"
+        android:text="Followers" />
+
+    <TextView
+        android:id="@+id/tvTFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tvNFollowing"
+        android:layout_below="@+id/tvNPosts"
+        android:text="Following" />
+
+    <TextView
+        android:id="@+id/tvProfName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvNPosts"
+        android:layout_below="@+id/tvTPosts"
+        android:layout_marginTop="20dp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/tvProfUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvProfName"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/tvProfName"
+        android:text="UserName" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvProfPosts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvProfName"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:id="@+id/tvIsFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tvNFollowing"
+        android:layout_alignTop="@+id/tvProfName"
+        android:background="@color/colorPrimaryDark"
+        android:padding="1dp"
+        android:text="FOLLOW"
+        android:textColor="@color/colorAccent" />
+
+</RelativeLayout>
