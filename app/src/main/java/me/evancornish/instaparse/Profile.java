@@ -1,11 +1,16 @@
 package me.evancornish.instaparse;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -16,6 +21,7 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import me.evancornish.instaparse.model.Post;
 
@@ -31,9 +37,8 @@ public class Profile extends AppCompatActivity {
     RecyclerView rvProfPosts;
     ParseUser user;
     ArrayList<Post> posts;
-    ArrayList<String> followers;
-    ArrayList<String> following;
     PostAdapter adapter;
+    boolean isYou;
     boolean areFollowing = false;
 
     @Override
@@ -50,7 +55,7 @@ public class Profile extends AppCompatActivity {
         posts = new ArrayList<>();
         adapter = new PostAdapter(posts);
         rvProfPosts = findViewById(R.id.rvProfPosts);
-        rvProfPosts.setLayoutManager(new LinearLayoutManager(this));
+        rvProfPosts.setLayoutManager(new GridLayoutManager(this, 2));
         rvProfPosts.setAdapter(adapter);
 
         userID = getIntent().getStringExtra("user");
@@ -66,24 +71,41 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        tvIsFollowing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (areFollowing) {
-                    for (String follower : followers)
-                        if (follower.equals(userID))
-                            followers.remove(follower);
-                    tvIsFollowing.setText("FOLLOW");
-                    tvNFollowers.setText(Integer.toString(Integer.parseInt(tvNFollowers.getText().toString()) - 1));
-                } else {
-                    followers.add(ParseUser.getCurrentUser().getObjectId());
-                    tvIsFollowing.setText("FOLLOWING");
-                    tvNFollowers.setText(Integer.toString(Integer.parseInt(tvNFollowers.getText().toString()) + 1));
+        isYou = userID.equals(ParseUser.getCurrentUser().getObjectId());
+        if (!isYou) {
+            tvIsFollowing.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (areFollowing) {
+                        tvIsFollowing.setText("FOLLOW");
+                        tvNFollowers.setText(Integer.toString(Integer.parseInt(tvNFollowers.getText().toString()) - 1));
+                    } else {
+                        tvIsFollowing.setText("FOLLOWING");
+                        tvNFollowers.setText(Integer.toString(Integer.parseInt(tvNFollowers.getText().toString()) + 1));
+                    }
+                    areFollowing = !areFollowing;
                 }
-                user.put("followers", followers);
-                user.saveInBackground();
-            }
-        });
+            });
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail, menu);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 
     public void getLists() {
@@ -105,22 +127,11 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        followers = (ArrayList<String>) user.get("followers");
-        following = (ArrayList<String>) user.get("following");
-
-        if (followers == null)
-            followers = new ArrayList<>();
-        if (following == null)
-            following = new ArrayList<>();
-
-        for (String follower : followers)
-            if (follower.equals(userID))
-                areFollowing = true;
-
-        tvNFollowers.setText(Integer.toString(followers.size()));
-        tvNFollowing.setText(Integer.toString(following.size()));
+        tvNFollowers.setText(Integer.toString((int) (Math.random() * 1000)));
+        tvNFollowing.setText(Integer.toString((int) (Math.random() * 1000)));
         tvProfName.setText(user.getString("name"));
         tvProfUserName.setText("@" + user.getUsername());
-        tvIsFollowing.setText(areFollowing ? "FOLLOWING" : "FOLLOW");
+        if (!isYou)
+            tvIsFollowing.setText(areFollowing ? "FOLLOWING" : "FOLLOW");
     }
 }
